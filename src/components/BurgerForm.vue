@@ -7,24 +7,24 @@
                 <input type="text" id="name" v-model="nome" placeholder="Digite o seu nome">
             </div>
             <div class="input-container">
-        <label for="pao">Escolha o pão:</label>
-        <select name="pao" id="pao" v-model="pao">
-          <option value="">Selecione o seu pão</option>
-          <option v-for="pao in paes" :key="pao.id" :value="pao.tipo">{{ pao.tipo }}</option>
+        <label for="lanche">Escolha o lanche:</label>
+        <select name="lanche" id="lanche" v-model="lanche">
+          <option value="">Selecione o seu lanche</option>
+          <option v-for="lanche in lanches" :key="lanche.id" :value="lanche.nome">{{ lanche.nome }}</option>
         </select>
       </div>
       <div class="input-container">
-        <label for="carne">Escolha a carne do seu Burger:</label>
-        <select name="carne" id="carne" v-model="carne">
-          <option value="">Selecione o tipo de carne</option>
-          <option v-for="carne in carnes" :key="carne.id" :value="carne.tipo">{{ carne.tipo }}</option>
+        <label for="bebida">Escolha a bebida:</label>
+        <select name="bebida" id="bebida" v-model="bebida">
+          <option value="">Selecione a bebida</option>
+          <option v-for="bebida in lanches" :key="bebida.id" :value="bebida.nome">{{ bebida.nome }}</option>
         </select>
       </div>
       <div id="opcionais-container" class="input-container">
         <label id="opcionais-title" for="opcionais">Selecione os opcionais:</label>
-        <div class="checkbox-container" v-for="opcional in opcionaisdata" :key="opcional.id">
-          <input type="checkbox" name="opcionais" v-model="opcionais" :value="opcional.tipo">
-          <span>{{ opcional.tipo }}</span>
+        <div class="checkbox-container" v-for="opcional in lanches" :key="opcional.id">
+          <input type="checkbox" name="opcionais" v-model="opcionais" :value="opcional.nome">
+          <span>{{ opcional.nome }}</span>
         </div>
       </div>
       <div class="input-container">
@@ -41,7 +41,7 @@ export default{
     name:"BurgerForm",
     data(){
         return{
-            paes:null,
+            lanches:null,
             carnes: null,
             opcionaisdata: null,
             nome: null,
@@ -55,12 +55,15 @@ export default{
     methods: {
         async getIgredientes() {
             
-            const req = await fetch("http://localhost:3000/ingredientes")
+            const req = await fetch("http://localhost:8080/api/produtos", {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
             const data = await req.json();
 
-            this.paes = data.paes
-            this.carnes = data.carnes
-            this.opcionaisdata = data.opcionais
+            this.lanches = data
         },
 
         async createBurger(e){

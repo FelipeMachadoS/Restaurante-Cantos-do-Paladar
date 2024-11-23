@@ -1,4 +1,4 @@
-# restaurantecontos
+# restaurante-canto-do-paladar
 
 ## Project setup
 ```

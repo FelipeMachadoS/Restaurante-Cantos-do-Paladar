@@ -9,9 +9,9 @@
 <script>
 import Dashboard from '../components/Dashboard'
 
-export default{
+export default {
   name: "Pedidos",
-  components:{
+  components: {
     Dashboard
   }
 }

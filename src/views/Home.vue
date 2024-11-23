@@ -5,8 +5,8 @@
     <BurgerForm />
   </div>
   <ul>
-      <li v-for="item in data" :key="item.id">{{ item.name }}</li>
-    </ul>
+    <li v-for="item in data" :key="item.id">{{ item.name }}</li>
+  </ul>
 </template>
 
 <script>
@@ -15,7 +15,7 @@ import BurgerForm from "../components/BurgerForm.vue"
 
 export default {
   name: "Home",
-  components:{
+  components: {
     Banner,
     BurgerForm
   },

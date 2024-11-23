@@ -1,5 +1,5 @@
 <template>
-    <Message :msg="msg" v-show="msg"/>
+    <Message :msg="msg" v-show="msg" />
     <div>
         <form id="burger-form" @submit="createBurger">
             <div class="input-container">
@@ -7,29 +7,29 @@
                 <input type="text" id="name" v-model="nome" placeholder="Digite o seu nome">
             </div>
             <div class="input-container">
-        <label for="lanche">Escolha o lanche:</label>
-        <select name="lanche" id="lanche" v-model="lanche">
-          <option value="">Selecione o seu lanche</option>
-          <option v-for="lanche in lanches" :key="lanche.id" :value="lanche.nome">{{ lanche.nome }}</option>
-        </select>
-      </div>
-      <div class="input-container">
-        <label for="bebida">Escolha a bebida:</label>
-        <select name="bebida" id="bebida" v-model="bebida">
-          <option value="">Selecione a bebida</option>
-          <option v-for="bebida in lanches" :key="bebida.id" :value="bebida.nome">{{ bebida.nome }}</option>
-        </select>
-      </div>
-      <div id="opcionais-container" class="input-container">
-        <label id="opcionais-title" for="opcionais">Selecione os opcionais:</label>
-        <div class="checkbox-container" v-for="opcional in lanches" :key="opcional.id">
-          <input type="checkbox" name="opcionais" v-model="opcionais" :value="opcional.nome">
-          <span>{{ opcional.nome }}</span>
-        </div>
-      </div>
-      <div class="input-container">
-        <input class="submit-btn" type="submit" value="Criar meu Burger!">
-      </div>
+                <label for="lanche">Escolha o lanche:</label>
+                <select name="lanche" id="lanche" v-model="lanche">
+                    <option value="">Selecione o seu lanche</option>
+                    <option v-for="lanche in lanches" :key="lanche.id" :value="lanche.nome">{{ lanche.nome }}</option>
+                </select>
+            </div>
+            <div class="input-container">
+                <label for="bebida">Escolha a bebida:</label>
+                <select name="bebida" id="bebida" v-model="bebida">
+                    <option value="">Selecione a bebida</option>
+                    <option v-for="bebida in lanches" :key="bebida.id" :value="bebida.nome">{{ bebida.nome }}</option>
+                </select>
+            </div>
+            <div id="opcionais-container" class="input-container">
+                <label id="opcionais-title" for="opcionais">Selecione os opcionais:</label>
+                <div class="checkbox-container" v-for="opcional in lanches" :key="opcional.id">
+                    <input type="checkbox" name="opcionais" v-model="opcionais" :value="opcional.nome">
+                    <span>{{ opcional.nome }}</span>
+                </div>
+            </div>
+            <div class="input-container">
+                <input class="submit-btn" type="submit" value="Criar meu Burger!">
+            </div>
         </form>
     </div>
 </template>
@@ -37,24 +37,24 @@
 <script>
 import Message from './Message.vue';
 
-export default{
-    name:"BurgerForm",
-    data(){
-        return{
-            lanches:null,
+export default {
+    name: "BurgerForm",
+    data() {
+        return {
+            lanches: null,
             carnes: null,
             opcionaisdata: null,
             nome: null,
-            pao:null,
-            carne:null,
+            pao: null,
+            carne: null,
             opcionais: [],
             status: "Solicitado",
-            msg:null 
+            msg: null
         }
     },
     methods: {
         async getIgredientes() {
-            
+
             const req = await fetch("http://localhost:8080/api/produtos", {
                 method: 'GET',
                 headers: {
@@ -66,111 +66,113 @@ export default{
             this.lanches = data
         },
 
-        async createBurger(e){
+        async createBurger(e) {
 
-        e.preventDefault()
+            e.preventDefault()
 
-        const data = {
-        nome: this.nome,
-        carne: this.carne,
-        pao: this.pao,
-        opcionais: Array.from(this.opcionais),
-        status: "Solicitado"
-        }
+            const data = {
+                nome: this.nome,
+                carne: this.carne,
+                pao: this.pao,
+                opcionais: Array.from(this.opcionais),
+                status: "Solicitado"
+            }
 
-        const dataJson = JSON.stringify(data)    
+            const dataJson = JSON.stringify(data)
 
-        const req = await fetch("http://localhost:3000/burgers", {
-            method: "POST",
-            headers: { "Content-Type" : "application/json" },
-            body: dataJson
-        });
+            const req = await fetch("http://localhost:3000/burgers", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: dataJson
+            });
 
-        const res = await req.json()
+            const res = await req.json()
 
-        this.msg = `Pedido N ${res.id} realizado com sucesso`
+            this.msg = `Pedido N ${res.id} realizado com sucesso`
 
-        setTimeout(() => this.msg = "", 3000); 
+            setTimeout(() => this.msg = "", 3000);
 
-        this.nome = "";
-        this.carne = "";
-        this.pao = "";
-        this.opcionais = "";
+            this.nome = "";
+            this.carne = "";
+            this.pao = "";
+            this.opcionais = "";
 
         }
     },
     mounted() {
         this.getIgredientes();
     },
-    components:{
+    components: {
         Message
     }
 }
 </script>
 
 <style scoped>
-    #burger-form{
-        max-width: 400px;
-        margin: 0 auto;
-    }
+#burger-form {
+    max-width: 400px;
+    margin: 0 auto;
+}
 
-    .input-container{
-        display: flex;
-        flex-direction: column;
-        margin-bottom : 20px;
-    }
+.input-container {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
 
-    label{
-        font-weight: bold;
-        margin-bottom: 15px;
-        color:#222;
-        padding: 5px 10px;
-        border-left: 4px solid #FCBA03;
-    }
+label {
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #222;
+    padding: 5px 10px;
+    border-left: 4px solid #FCBA03;
+}
 
-    input, select{
-        padding: 5px 10px;
-        width: 300px;
-    }
+input,
+select {
+    padding: 5px 10px;
+    width: 300px;
+}
 
-    #opcionais-container{
-        flex-direction: row;
-        flex-wrap: wrap;
-    }
+#opcionais-container {
+    flex-direction: row;
+    flex-wrap: wrap;
+}
 
-    #opcionais-title{
-        width: 100%;
-    }
+#opcionais-title {
+    width: 100%;
+}
 
-    .checkbox-container{
-        display: flex;
-        align-items: flex-start;
-        width: 50%;
-        margin-bottom: 20px;
-    }
+.checkbox-container {
+    display: flex;
+    align-items: flex-start;
+    width: 50%;
+    margin-bottom: 20px;
+}
 
-    .checkbox-container spam, .checkbox-container input{
-        width: auto;
-    }
+.checkbox-container spam,
+.checkbox-container input {
+    width: auto;
+}
 
-    .checkbox-container spam{
-        margin-left: 6px;
-        font-weight: bold;
-    }
+.checkbox-container spam {
+    margin-left: 6px;
+    font-weight: bold;
+}
 
-    .submit-btn{
-        background-color: #222;
-        color:#FCBA03;
-        font-weight: bold;
-        border: 2px solid #222;
-        padding: 10px;
-        font-size: 16px;
-        margin: 0 auto;
-        cursor: pointer;
-    }
+.submit-btn {
+    background-color: #222;
+    color: #FCBA03;
+    font-weight: bold;
+    border: 2px solid #222;
+    padding: 10px;
+    font-size: 16px;
+    margin: 0 auto;
+    cursor: pointer;
+}
 
-    .submit-btn:hover{
-        background-color: transparent;
-        color: #222;
-    }
+.submit-btn:hover {
+    background-color: transparent;
+    color: #222;
+}
 </style>

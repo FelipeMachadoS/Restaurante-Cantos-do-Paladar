@@ -1,6 +1,6 @@
 <template>
   <Navbar :logo="logo_src" :alt="app_name" />
-  <router-view/>
+  <router-view />
   <Footer />
 </template>
 
@@ -8,38 +8,37 @@
 import Navbar from './components/Navbar.vue';
 import Footer from './components/Footer.vue';
 
-  export default{
-    components:{
-      Navbar,
-      Footer
-    },
-    data(){
-    return{
+export default {
+  components: {
+    Navbar,
+    Footer
+  },
+  data() {
+    return {
       logo_src: "/img/logo.png",
-      app_name: "Restaurante Cantos Do Paladar"
+      app_name: "Restaurante Canto do Paladar"
     }
   }
-  }
+}
 
 </script>
 
 <style>
-  *{
-    font-family: Helvetica;
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
-  }
+* {
+  font-family: Helvetica;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
 
-  .main-container{
-    margin: 50px;
-    min-height: 250px;
-  }
+.main-container {
+  margin: 50px;
+  min-height: 250px;
+}
 
-  h1{
-    text-align: center;
-    font-size: 42px;
-    margin-bottom: 30px;
-    color: #222;
-  }
+h1 {
+  text-align: center;
+  font-size: 42px;
+  margin-bottom: 30px;
+  color: #222;}
 </style>

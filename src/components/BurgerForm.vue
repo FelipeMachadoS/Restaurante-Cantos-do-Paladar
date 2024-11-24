@@ -3,32 +3,45 @@
     <div>
         <form id="burger-form" @submit="createBurger">
             <div class="input-container">
-                <label for="nome">Nome do cliente:</label>
-                <input type="text" id="name" v-model="nome" placeholder="Digite o seu nome">
+                <label>Seu nome:</label>
+                <input type="text" id="nome" v-model="nome" placeholder="Digite o seu nome">
             </div>
             <div class="input-container">
-                <label for="lanche">Escolha o lanche:</label>
-                <select name="lanche" id="lanche" v-model="lanche">
-                    <option value="">Selecione o seu lanche</option>
-                    <option v-for="lanche in lanches" :key="lanche.id" :value="lanche.nome">{{ lanche.nome }}</option>
+                <label>Seu endereço:</label>
+                <input type="text" id="endereco" v-model="endereco" placeholder="Digite o seu endereço">
+            </div>
+            <div class="input-container">
+                <label>Escolha a forma de pagamento:</label>
+                <select id="formaPagamento" v-model="formaPagamento">
+                    <option value="" disabled selected>Selecione</option>
+                    <option value="pix"> PIX </option>
+                    <option value="cartaoCredito"> Cartão de crédito </option>
+                    <option value="dinheiro"> Dinheiro </option>
                 </select>
             </div>
             <div class="input-container">
-                <label for="bebida">Escolha a bebida:</label>
-                <select name="bebida" id="bebida" v-model="bebida">
-                    <option value="">Selecione a bebida</option>
-                    <option v-for="bebida in lanches" :key="bebida.id" :value="bebida.nome">{{ bebida.nome }}</option>
+                <label>Escolha o lanche:</label>
+                <select id="lanche" v-model="lanche">
+                    <option value="" disabled selected>Selecione</option>
+                    <option v-for="lanche in lanches" :key="lanche.id" :value="lanche"> {{ lanche.nome }} (R$ {{ lanche.preco }}) </option>
                 </select>
             </div>
-            <div id="opcionais-container" class="input-container">
-                <label id="opcionais-title" for="opcionais">Selecione os opcionais:</label>
-                <div class="checkbox-container" v-for="opcional in lanches" :key="opcional.id">
-                    <input type="checkbox" name="opcionais" v-model="opcionais" :value="opcional.nome">
-                    <span>{{ opcional.nome }}</span>
+            <div class="input-container">
+                <label>Escolha a bebida:</label>
+                <select id="bebida" v-model="bebida">
+                    <option value="" disabled selected>Selecione</option>
+                    <option v-for="bebida in bebidas" :key="bebida.id" :value="bebida">{{ bebida.nome }} (R$ {{ bebida.preco }})</option>
+                </select>
+            </div>
+            <div id="acompanhamentos-container" class="input-container">
+                <label id="acompanhamentos-title">Selecione os acompanhamentos:</label>
+                <div class="checkbox-container" v-for="acompanhamento in acompanhamentos" :key="acompanhamento.id">
+                    <input type="checkbox" :value="acompanhamento" v-model="acompanhamentosSelecionados">
+                    <span>{{ acompanhamento.nome }} (R$ {{ acompanhamento.preco }})</span>
                 </div>
             </div>
             <div class="input-container">
-                <input class="submit-btn" type="submit" value="Criar meu Burger!">
+                <input class="submit-btn" type="submit" value="Enviar para o carrinho!" :disabled="!nome || !endereco || !formaPagamento || !lanche || !bebida || !acompanhamentos">
             </div>
         </form>
     </div>
@@ -41,29 +54,32 @@ export default {
     name: "BurgerForm",
     data() {
         return {
-            lanches: null,
-            carnes: null,
-            opcionaisdata: null,
-            nome: null,
-            pao: null,
-            carne: null,
-            opcionais: [],
-            status: "Solicitado",
+            lanches: [],
+            bebidas: [],
+            acompanhamentos: [],
+            nome: '',
+            endereco: '',
+            formaPagamento: '',
+            lanche: '',
+            bebida: '',
+            acompanhamentosSelecionados: [],
             msg: null
         }
     },
     methods: {
-        async getIgredientes() {
-
+        async getProdutos() {
             const req = await fetch("http://localhost:8080/api/produtos", {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'
                 }
             })
+
             const data = await req.json();
 
-            this.lanches = data
+            this.lanches = data.filter(produto => produto.categoria === "LANCHE")
+            this.bebidas = data.filter(produto => produto.categoria === "BEBIDA")
+            this.acompanhamentos = data.filter(produto => produto.categoria === "ACOMPANHAMENTO")
         },
 
         async createBurger(e) {
@@ -72,35 +88,30 @@ export default {
 
             const data = {
                 nome: this.nome,
-                carne: this.carne,
-                pao: this.pao,
-                opcionais: Array.from(this.opcionais),
-                status: "Solicitado"
+                endereco: this.endereco,
+                formaPagamento: this.formaPagamento,
+                lanche: this.lanche,
+                bebida: this.bebida,
+                acompanhamentos: this.acompanhamentosSelecionados
             }
 
             const dataJson = JSON.stringify(data)
+            // console.log(dataJson)
 
-            const req = await fetch("http://localhost:3000/burgers", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: dataJson
-            });
+            this.msg = `Pedido adicionado ao carrinho!`
 
-            const res = await req.json()
-
-            this.msg = `Pedido N ${res.id} realizado com sucesso`
-
-            setTimeout(() => this.msg = "", 3000);
-
-            this.nome = "";
-            this.carne = "";
-            this.pao = "";
-            this.opcionais = "";
+            setTimeout(() => {
+                this.msg = ""
+                this.nome = "";
+                this.lanche = "";
+                this.bebida = "";
+                this.acompanhamentosSelecionados = [];
+            }, 4000);
 
         }
     },
     mounted() {
-        this.getIgredientes();
+        this.getProdutos();
     },
     components: {
         Message
@@ -134,12 +145,12 @@ select {
     width: 300px;
 }
 
-#opcionais-container {
+#acompanhamentos-container {
     flex-direction: row;
     flex-wrap: wrap;
 }
 
-#opcionais-title {
+#acompanhamentos-title {
     width: 100%;
 }
 

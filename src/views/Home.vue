@@ -1,12 +1,9 @@
 <template>
   <Banner />
   <div class="main-container">
-    <h1>Monte seu burger:</h1>
+    <h1>Monte seu burger!</h1>
     <BurgerForm />
   </div>
-  <ul>
-    <li v-for="item in data" :key="item.id">{{ item.name }}</li>
-  </ul>
 </template>
 
 <script>

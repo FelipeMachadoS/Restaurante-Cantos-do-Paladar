@@ -40,7 +40,7 @@
                     <span>{{ acompanhamento.nome }} (R$ {{ acompanhamento.preco }})</span>
                 </div>
             </div>
-            <div class="input-container">
+            <div>
                 <input class="submit-btn" type="submit" value="Enviar para o carrinho!" :disabled="!nome || !endereco || !formaPagamento || !lanche || !bebida || !acompanhamentos">
             </div>
         </form>
@@ -120,6 +120,16 @@ export default {
 </script>
 
 <style scoped>
+span {
+    position: relative;
+    margin-left: 2px;
+}
+
+input {
+    position: relative;
+    margin-top: 2px;
+}
+
 #burger-form {
     max-width: 400px;
     margin: 0 auto;
@@ -128,6 +138,8 @@ export default {
 .input-container {
     display: flex;
     flex-direction: column;
+    position: relative;
+    left: 12%;
     margin-bottom: 20px;
 }
 
@@ -157,7 +169,7 @@ select {
 .checkbox-container {
     display: flex;
     align-items: flex-start;
-    width: 50%;
+    width: 40%;
     margin-bottom: 20px;
 }
 
@@ -172,6 +184,8 @@ select {
 }
 
 .submit-btn {
+    position: relative;
+    left: 13%;
     background-color: #222;
     color: #FCBA03;
     font-weight: bold;

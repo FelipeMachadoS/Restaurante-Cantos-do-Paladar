@@ -14,9 +14,9 @@
                 <label>Escolha a forma de pagamento:</label>
                 <select id="formaPagamento" v-model="formaPagamento">
                     <option value="" disabled selected>Selecione</option>
-                    <option value="pix"> PIX </option>
-                    <option value="cartaoCredito"> Cartão de crédito </option>
-                    <option value="dinheiro"> Dinheiro </option>
+                    <option value="PIX"> PIX </option>
+                    <option value="Cartão de crédito"> Cartão de crédito </option>
+                    <option value="Dinheiro"> Dinheiro </option>
                 </select>
             </div>
             <div class="input-container">
@@ -41,7 +41,7 @@
                 </div>
             </div>
             <div>
-                <input class="submit-btn" type="submit" value="Enviar para o carrinho!" :disabled="!nome || !endereco || !formaPagamento || !lanche || !bebida || !acompanhamentos">
+                <input class="submit-btn" type="submit" value="Enviar para o carrinho!" :disabled="!nome || !endereco || !formaPagamento || !lanche || !bebida">
             </div>
         </form>
     </div>
@@ -63,7 +63,8 @@ export default {
             lanche: '',
             bebida: '',
             acompanhamentosSelecionados: [],
-            msg: null
+            msg: null,
+            dataJson: null
         }
     },
     methods: {
@@ -76,6 +77,8 @@ export default {
             })
 
             const data = await req.json();
+
+            data.filter(produto => produto.preco = parseFloat(produto.preco.toFixed(2)))
 
             this.lanches = data.filter(produto => produto.categoria === "LANCHE")
             this.bebidas = data.filter(produto => produto.categoria === "BEBIDA")
@@ -95,14 +98,16 @@ export default {
                 acompanhamentos: this.acompanhamentosSelecionados
             }
 
-            const dataJson = JSON.stringify(data)
-            // console.log(dataJson)
+            this.dataJson = JSON.stringify(data)
+            localStorage.setItem('pedido', this.dataJson)
 
             this.msg = `Pedido adicionado ao carrinho!`
 
             setTimeout(() => {
                 this.msg = ""
                 this.nome = "";
+                this.endereco = "";
+                this.formaPagamento = "";
                 this.lanche = "";
                 this.bebida = "";
                 this.acompanhamentosSelecionados = [];
@@ -169,7 +174,7 @@ select {
 .checkbox-container {
     display: flex;
     align-items: flex-start;
-    width: 40%;
+    width: 45%;
     margin-bottom: 20px;
 }
 

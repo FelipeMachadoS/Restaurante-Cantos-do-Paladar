@@ -8,9 +8,9 @@ const routes = [
     component: HomeView
   },
   {
-    path: '/pedidos',
-    name: 'Pedido',
-    component: () => import(/* webpackChunkName: "pedidos" */ '../views/Pedidos.vue')
+    path: '/carrinho',
+    name: 'Carrinho',
+    component: () => import('../views/Carrinho.vue')
   }
 ]
 

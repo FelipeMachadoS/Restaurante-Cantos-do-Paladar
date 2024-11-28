@@ -69,7 +69,7 @@ export default {
     },
     methods: {
         async getProdutos() {
-            const req = await fetch("http://localhost:8080/api/produtos", {
+            const req = await fetch(process.env.VUE_APP_API_URL + "/api/produtos", {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'
